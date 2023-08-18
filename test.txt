@@ -1,0 +1,131 @@
+import os from"os"
+import {Express} from "express"
+import {RedisDb} from "./utils/redisConnection"
+import {extraChatAttributes} from "./utils/chatAttributeExtractor"
+const CONSUMER_NAME = os.hostname()
+const wait = (ms:number)  => new Promise((res) => setTImeout(res, ms))
+const {STREAM_NAME = "cdt:rtm:hist", GROUP_NAME = "cdt:rtmhistGrp"}  = process.env
+export const readStream  = async (app:Express, dopolling:boolean): Promise<void> => {
+await wait(1000);
+const redis = await RedisDb.getInstance()
+do {
+try {
+const streamData = await redis.xreadgroup (
+"GROUP",
+GROUP_NAME,
+CONSUMER_NAME,
+"Count"
+1,
+"BLOCK",
+10000, 
+"STREAMS"
+STREAM_NAME,
+">"
+);
+
+
+if (streamData) {
+try {
+const messageID = (streamData as any)[0][1][0][0];
+const payload = (streamData as any)[0][1][0][1][1]
+const chatObj = JSON.parse(payload)
+await redis.xack(STREAM_NAME, GROUP_NAME, messageId)
+const res = await extractChatAttributes([chatObj])
+} catch (error) {
+}
+}
+catch (error) {
+logger.error(error);
+}
+} while (doPolling)
+
+}
+
+}
+
+}
+}
+}
+
+
+
+/*test case*/
+
+import { readStream } from './your-module'; // Import the module containing readStream function
+
+describe('readStream', () => {
+  // Mocking dependencies
+  const wait = jest.fn(() => Promise.resolve());
+  const RedisDb = {
+    getInstance: jest.fn(() => Promise.resolve({})),
+  };
+  const redis = {
+    xreadgroup: jest.fn(() => Promise.resolve(null)),
+    xack: jest.fn(() => Promise.resolve(null)),
+  };
+  const extractChatAttributes = jest.fn(() => Promise.resolve(null));
+
+  const app = {} as any; // Mock Express app
+  const GROUP_NAME = 'group';
+  const CONSUMER_NAME = 'consumer';
+  const STREAM_NAME = 'stream';
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should read and process stream data', async () => {
+    redis.xreadgroup.mockResolvedValueOnce([
+      [
+        STREAM_NAME,
+        [
+          [1, ['message-id', ['message-contents']]],
+        ],
+      ],
+    ]);
+
+    await readStream(app, true);
+
+    expect(wait).toHaveBeenCalledWith(1000);
+    expect(RedisDb.getInstance).toHaveBeenCalled();
+    expect(redis.xreadgroup).toHaveBeenCalledWith(
+      'GROUP',
+      GROUP_NAME,
+      CONSUMER_NAME,
+      'Count',
+      1,
+      'BLOCK',
+      10000,
+      'STREAMS',
+      STREAM_NAME,
+      '>'
+    );
+    expect(redis.xack).toHaveBeenCalledWith(STREAM_NAME, GROUP_NAME, 'message-id');
+    expect(extractChatAttributes).toHaveBeenCalledWith([JSON.parse('message-contents')]);
+  });
+
+  it('should handle errors gracefully', async () => {
+    redis.xreadgroup.mockRejectedValueOnce(new Error('Redis error'));
+
+    await readStream(app, true);
+
+    expect(wait).toHaveBeenCalledWith(1000);
+    expect(RedisDb.getInstance).toHaveBeenCalled();
+    expect(redis.xreadgroup).toHaveBeenCalledWith(
+      'GROUP',
+      GROUP_NAME,
+      CONSUMER_NAME,
+      'Count',
+      1,
+      'BLOCK',
+      10000,
+      'STREAMS',
+      STREAM_NAME,
+      '>'
+    );
+    expect(logger.error).toHaveBeenCalledWith(expect.any(Error));
+  });
+
+  // Add more test cases as needed
+
+});

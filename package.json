@@ -3,16 +3,35 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@material-ui/core": "^4.12.4",
+    "@mui/icons-material": "^5.14.7",
+    "@mui/joy": "^5.0.0-beta.4",
+    "@mui/material": "^5.14.7",
+    "@mui/x-data-grid": "^6.12.1",
+    "@mui/x-data-grid-generator": "^6.12.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "fabricjs-react": "^1.2.0",
+    "material-ui-color": "^1.2.0",
+    "material-ui-color-picker": "^3.5.1",
+    "material-ui-dropzone": "^3.5.0",
+    "pg": "^8.11.3",
+    "pg-hstore": "^2.3.4",
     "react": "^18.2.0",
+    "react-color": "^2.19.3",
     "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1",
+    "react-dropzone": "^14.2.3",
+    "react-scripts": "^5.0.1",
+    "sequelize": "^6.33.0",
+    "tw-elements-react": "^1.0.0-alpha1",
+    "unzipper": "^0.10.14",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-app-rewired start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -34,5 +53,15 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "browserify-zlib": "^0.2.0",
+    "buffer": "^6.0.3",
+    "constants-browserify": "^1.0.0",
+    "customize-cra": "^1.0.0",
+    "node-libs-browser": "^2.2.1",
+    "path-browserify": "^1.0.1",
+    "react-app-rewired": "^2.2.1",
+    "stream-browserify": "^3.0.0"
   }
 }
