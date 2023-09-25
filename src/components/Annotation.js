@@ -393,30 +393,15 @@ const Annotation = ({ fileData }) => {
               height: "500px",
             }}
           >
-            {boundingBoxes.map((box, index) => (
-              <l1>
-                {box.color}, {box.label}
-              </l1>
-              //   <rect
-              //     key={index}
-              //     x={box.left}
-              //     y={box.top}
-              //     width={box.width}
-              //     height={box.height}
-              //     fill={box.color}
-              //     stroke={box.color}
-              //     strokeWidth={2}
-              //     selectable={true}
-              //     hasControls={true}
-              //     hasBorders={true}
-              //     object={box.object}
-              //   />
-            ))}
             <FabricJSCanvas
               className="canvas-container"
               onReady={onReady}
               selection={true}
               evented={true}
+              style={{
+                width: "800px",
+                height: "500px",
+              }}
             />
 
             {/* <Canvas1 /> */}
