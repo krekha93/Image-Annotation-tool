@@ -59,13 +59,34 @@ export default function BasicModal({ addProject }) {
       setDescription(event.target.value);
     }
   };
-  const handleSubmit = (event) => {
-    event.preventDefault(); // Prevent default form submission
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     const project = {
       projectName,
       description,
       selectedLabel,
     };
+
+    const apiUrl = "http://localhost:8000/project/data";
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(project),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      console.log("API response:", data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
 
     addProject(project);
 
